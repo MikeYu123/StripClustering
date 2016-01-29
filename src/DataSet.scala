@@ -9,7 +9,7 @@ object DataSet {
 
 
   /*** read from file ***/
-  var jParser = jfactory.createJsonParser(new File(".\\data\\data.json"))
+  var jParser = jfactory.createJsonParser(new File(".\\src\\data\\data.json"))
 
   def main(args: Array[String]) {
     println(this.str)

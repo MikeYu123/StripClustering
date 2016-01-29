@@ -12,10 +12,10 @@ class KMeansClusterer (k: Int){
 
   def resetLine(points: List[Point]) : Line = {
     val n = points.length
-    val sumxy = (points map (x => x.x * x.y)) reduce ((x, y) => x+y)
-    val sumx = points reduce ((x,y) => x.x + y.x)
-    val sumy = points reduce ((x,y) => x.y + y.y)
-    val sumxsq = points reduce ((x,y) => (x.x*x.x) + (y.x * y.x))
+    val sumxy : Double = (points map (x => x.x * x.y)) reduceLeft ((x, y) => x+y)
+    val sumx : Double = (points map (x => x.x)) reduceLeft ((x,y) => x + y)
+    val sumy : Double = (points map (x => x.y)) reduceLeft ((x,y) => x + y)
+    val sumxsq : Double = (points map (x => x.x * x.x)) reduceLeft ((x,y) => x + y)
     val k = ((n * sumxy) - (sumx * sumy)) / ((n * sumxsq) - (sumx * sumx))
     val b = (sumy - (k * sumx)) / n
     new Line(k, b)
