@@ -19,5 +19,14 @@
     <orderEntry type="library" name="Maven: com.fasterxml.jackson.core:jackson-databind:2.6.2" level="project" />
     <orderEntry type="library" name="Maven: com.fasterxml.jackson.core:jackson-annotations:2.6.0" level="project" />
     <orderEntry type="library" name="Maven: com.fasterxml.jackson.core:jackson-core:2.6.2" level="project" />
+    <orderEntry type="library" name="Maven: org.json4s:json4s-jackson_2.10:3.3.0" level="project" />
+    <orderEntry type="library" name="Maven: org.scala-lang:scala-library:2.10.6" level="project" />
+    <orderEntry type="library" name="Maven: org.json4s:json4s-core_2.10:3.3.0" level="project" />
+    <orderEntry type="library" name="Maven: org.json4s:json4s-ast_2.10:3.3.0" level="project" />
+    <orderEntry type="library" name="Maven: org.json4s:json4s-scalap_2.10:3.3.0" level="project" />
+    <orderEntry type="library" name="Maven: com.thoughtworks.paranamer:paranamer:2.8" level="project" />
+    <orderEntry type="library" name="Maven: com.fasterxml.jackson.core:jackson-databind:2.6.2" level="project" />
+    <orderEntry type="library" name="Maven: com.fasterxml.jackson.core:jackson-annotations:2.6.0" level="project" />
+    <orderEntry type="library" name="Maven: com.fasterxml.jackson.core:jackson-core:2.6.2" level="project" />
   </component>
 </module>
