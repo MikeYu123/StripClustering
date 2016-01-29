@@ -36,5 +36,20 @@ class KMeansClusterer (k: Int){
     lineMap.values.toList map (points => resetLine(points))
   }
 
+  def isSimilar(list1 : List[Line], list2 : List[Line]) = {
+//  TODO: is exact match efficient?
+    list1.count(line1 => list2.count(line2 => line1.isEqual(line2)) > 0) > 0
+  }
+
+  def clusterize(points : List[Point]) : List[Line] = {
+    var lines = initClusters()
+    var previousLines = List[Line]()
+    do{
+      previousLines = lines
+      lines = resetLines(pickLines(previousLines, points))
+    } while(!isSimilar(previousLines, lines))
+    lines
+  }
+
 }
 
