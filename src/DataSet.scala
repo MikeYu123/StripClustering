@@ -1,17 +1,11 @@
 import java.io.File
-
-import com.fasterxml.jackson.core.{JsonParser, JsonFactory}
+import org.json4s._
+import org.json4s.jackson.JsonMethods._
 
 object DataSet {
-  val str = "Ololo"
-  println("hello world")
-  var jfactory = new JsonFactory()
-
-
-  /*** read from file ***/
-  var jParser = jfactory.createJsonParser(new File(".\\src\\data\\data.json"))
+  val data = parse(new File("./src/data/data.json"))
 
   def main(args: Array[String]) {
-    println(this.str)
+
   }
 }
