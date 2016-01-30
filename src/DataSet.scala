@@ -17,8 +17,8 @@ object DataSet {
 
   } yield Point(lat, lng, address, name)
 
-  val clusters = new KMeansClusterer(1000).clusterize(data)
-  clusters.keys foreach (x => println("y = " + x.getK.toString + "x + " + x.getB.toString()))
+  val clusters = new FuzzyEMAlgorithm(1000).clusterize(data)
+  clusters foreach (x => println("y = " + x.getK.toString + "x + " + x.getB.toString()))
 //  println()
 
   def main(args: Array[String]): Unit = {
