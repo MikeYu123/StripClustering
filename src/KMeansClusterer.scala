@@ -26,7 +26,22 @@ class KMeansClusterer (K: Int){
   }
 
   def pickLines(lines: List[Line], points: List[Point]) : Map[Line, List[Point]] = {
-      points groupBy(x => pickLine(x, lines))
+      points groupBy(x => getLine(points, x, lines))//pickLine(x, lines)
+  }
+  def getLine(points: List[Point], p:Point, lines: List[Line]):Line = {
+    val line = pickLine(p, lines)
+//    val line_d = line.distance(p)
+//    val nearestPoints = points takeWhile (point => p != point && 2*line_d > math.sqrt(math.pow(p.x - point.x, 2.0) + math.pow(p.y - point.y, 2.0)))
+//
+//    val npFreq = nearestPoints groupBy (pickLine(_, lines)) map(x=> (x._1, x._2.length))
+//
+//    val candidate = if (npFreq.nonEmpty) npFreq maxBy (x => x._2) else null
+////    if (candidate != null) println(candidate._2)
+//    if (candidate != null &&  candidate._2 > 1) {
+//      println("WIN")
+//      line = candidate._1
+//    }
+    line
   }
 
   def resetLines(lineMap : Map[Line, List[Point]]) : List[Line] = {
