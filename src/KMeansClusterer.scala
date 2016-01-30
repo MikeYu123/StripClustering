@@ -39,14 +39,14 @@ class KMeansClusterer (K: Int){
     list1.forall(line1 => list2.count(line2 => line1.isEqual(line2)) > 0)
   }
 
-  def clusterize(points : List[Point]) : List[Line] = {
+  def clusterize(points : List[Point]) : Map[Line, List[Point]] = {
     var lines = initClusters()
     var previousLines = List[Line]()
     do{
       previousLines = lines
       lines = resetLines(pickLines(previousLines, points))
     } while(!isSimilar(previousLines, lines))
-    lines
+    pickLines(lines, points)
   }
 
 }
