@@ -22,6 +22,8 @@ class FuzzyEMAlgorithm (K: Int){
       val sumY = ((points map (point => point.y * mem.getOrElse(point, 0.0))) reduce ((x, y) => x + y)) / memSum
       val sumXSq = ((points map (point => math.pow(point.x * mem.getOrElse(point, 0.0), 2.0))) reduce ((x, y) => x + y)) / memSqSum
       val sumXY = ((points map (point => point.x * point.y * math.pow(mem.getOrElse(point, 0.0), 2.0))) reduce ((x, y) => x + y)) / memSqSum
+//      val sumXSq = ((points map (point => math.pow(point.x * mem.getOrElse(point, 0.0), 1.0))) reduce ((x, y) => x + y)) / memSum
+//      val sumXY = ((points map (point => point.x * point.y * math.pow(mem.getOrElse(point, 0.0), 1.0))) reduce ((x, y) => x + y)) / memSum
       val k = ((n * sumXY) - (sumX * sumY)) / ((n * sumXSq) - (sumX * sumX))
       val b = (sumY - (k * sumX)) / n
       new Line(k, b)
