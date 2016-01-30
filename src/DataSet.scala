@@ -46,15 +46,22 @@ object DataSet {
   }
 
   def main(args: Array[String]): Unit = {
-    val streets = (data groupBy (p => p.street)) map (x => (x._1, x._2.length)) filter (_._2 > 20)
+    val streets = (data groupBy (p => p.street)) map (x => (x._1, x._2.length)) filter (_._2 > 35)
     val filteredData = data filter (x => streets.keySet.contains(x.street))
+    var clusters:Map[Line, List[Point]] = null
+    var counter:Int = 0
+    do{
+//      println((counter+=1).toString)
+      clusters = new KMeansClusterer(100*5).clusterize(filteredData)
+//      clusters.keys foreach (x => println("y = " + x.getK.toString + "x + " + x.getB.toString()))
+    } while (clusters.size != 5)
 
     val clusters = new FuzzyEMAlgorithm(10).clusterize(filteredData)
     clusters foreach (x => println("y = " + x.getK.toString + "x + " + x.getB.toString()))
 
-//    val json = toJson(clusters)
-//    println(json)
+    val json = toJson(clusters)
+    println(json)
 
-//    write(List(".", "src","data", "result.json").mkString(sep), json)
+    write(List(".", "src","data", "result.json").mkString(sep), json)
   }
 }

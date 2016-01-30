@@ -6,8 +6,9 @@ class KMeansClusterer (K: Int){
 
   def randDouble(max: Double, min: Double) = math.random * (max - min) + min
 
-  def initClusters(): List[Line] = {
-    (1 to K).toList map (x => new Line(randDouble(3, -3), randDouble(30, -30)))
+  def initClusters(points: List[Point]): List[Line] = {
+//    (1 to K).toList map (x => new Line(randDouble(3000, -3000), randDouble(3, -3)))
+    points.grouped(2).toList map (x => new Line(resetLine(x).getK*randDouble(0.9, 1.1),resetLine(x).getB*randDouble(0.9, 1.1)))
   }
 
   def resetLine(points: List[Point]) : Line = {
@@ -29,18 +30,17 @@ class KMeansClusterer (K: Int){
       points groupBy(x => getLine(points, x, lines))//pickLine(x, lines)
   }
   def getLine(points: List[Point], p:Point, lines: List[Line]):Line = {
-    val line = pickLine(p, lines)
-//    val line_d = line.distance(p)
-//    val nearestPoints = points takeWhile (point => p != point && 2*line_d > math.sqrt(math.pow(p.x - point.x, 2.0) + math.pow(p.y - point.y, 2.0)))
-//
-//    val npFreq = nearestPoints groupBy (pickLine(_, lines)) map(x=> (x._1, x._2.length))
-//
-//    val candidate = if (npFreq.nonEmpty) npFreq maxBy (x => x._2) else null
-////    if (candidate != null) println(candidate._2)
-//    if (candidate != null &&  candidate._2 > 1) {
-//      println("WIN")
-//      line = candidate._1
-//    }
+    var line = pickLine(p, lines)
+    val line_d = line.distance(p)
+    val nearestPoints = points takeWhile (point => p != point && 2*line_d > math.sqrt(math.pow(p.x - point.x, 2.0) + math.pow(p.y - point.y, 2.0)))
+
+    val npFreq = nearestPoints groupBy (pickLine(_, lines)) map(x=> (x._1, x._2.length))
+
+    val candidate = if (npFreq.nonEmpty) npFreq maxBy (x => x._2) else null
+    if (candidate != null &&  candidate._2 > 1) {
+      println("WIN")
+      line = candidate._1
+    }
     line
   }
 
@@ -55,7 +55,7 @@ class KMeansClusterer (K: Int){
   }
 
   def clusterize(points : List[Point]) : Map[Line, List[Point]] = {
-    var lines = initClusters()
+    var lines = initClusters(points)
     var previousLines = List[Line]()
     do{
       previousLines = lines
