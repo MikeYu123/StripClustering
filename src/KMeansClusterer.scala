@@ -2,12 +2,12 @@
  * Created by mayur_000 on 29.01.2016.
  */
 
-class KMeansClusterer (k: Int){
+class KMeansClusterer (K: Int){
 
   def randDouble(max: Double, min: Double) = math.random * (max - min) + min
 
   def initClusters(): List[Line] = {
-    List(1 to k) map (x => new Line(randDouble(1, -1), randDouble(30, -30)))
+    (1 to K).toList map (x => new Line(randDouble(.5, .0), randDouble(30, 20)))
   }
 
   def resetLine(points: List[Point]) : Line = {
@@ -22,13 +22,11 @@ class KMeansClusterer (k: Int){
   }
 
   def pickLine(point: Point, lines: List[Line]):Line = {
-      lines.min(new Ordering[Line] {
-        def compare(x:Line,y:Line): Int = x.distance(point)compare y.distance(point)
-      })
+      lines minBy(x => x.distance(point))
   }
 
   def pickLines(lines: List[Line], points: List[Point]) : Map[Line, List[Point]] = {
-    points groupBy(x => pickLine(x, lines))
+      points groupBy(x => pickLine(x, lines))
   }
 
   def resetLines(lineMap : Map[Line, List[Point]]) : List[Line] = {

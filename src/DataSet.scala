@@ -6,7 +6,7 @@ object DataSet {
   private val sep = File.separator
   private val rawData:JValue = parse(new File(List(".", "src","data", "data.json").mkString(sep)))
 
-  val data = for {
+  val data : List[Point] = for {
     JArray(data) <- rawData
     JObject(item) <- data
     JField("name", JString(name)) <- item
@@ -17,9 +17,10 @@ object DataSet {
 
   } yield Point(lat, lng, address, name)
 
-  println(data)
+  val clusters = new KMeansClusterer(30).clusterize(data)
+  clusters foreach (x => println("y = " + x.getK.toString + "x + " + x.getB.toString()))
+//  println()
 
-  def main(args: Array[String]) {
-
+  def main(args: Array[String]): Unit = {
   }
 }
