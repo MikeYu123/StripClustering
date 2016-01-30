@@ -7,7 +7,7 @@ class KMeansClusterer (K: Int){
   def randDouble(max: Double, min: Double) = math.random * (max - min) + min
 
   def initClusters(): List[Line] = {
-    (1 to K).toList map (x => new Line(randDouble(.5, .0), randDouble(30, 20)))
+    (1 to K).toList map (x => new Line(randDouble(3, -3), randDouble(30, -30)))
   }
 
   def resetLine(points: List[Point]) : Line = {
@@ -36,7 +36,7 @@ class KMeansClusterer (K: Int){
 
   def isSimilar(list1 : List[Line], list2 : List[Line]) = {
 //  TODO: is exact match efficient?
-    list1.count(line1 => list2.count(line2 => line1.isEqual(line2)) > 0) > 0
+    list1.forall(line1 => list2.count(line2 => line1.isEqual(line2)) > 0)
   }
 
   def clusterize(points : List[Point]) : List[Line] = {

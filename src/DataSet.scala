@@ -17,7 +17,7 @@ object DataSet {
 
   } yield Point(lat, lng, address, name)
 
-  val clusters = new KMeansClusterer(30).clusterize(data)
+  val clusters = new KMeansClusterer(100000).clusterize(data)
   clusters foreach (x => println("y = " + x.getK.toString + "x + " + x.getB.toString()))
 //  println()
 
