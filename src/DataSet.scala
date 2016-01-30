@@ -49,12 +49,12 @@ object DataSet {
     val streets = (data groupBy (p => p.street)) map (x => (x._1, x._2.length)) filter (_._2 > 20)
     val filteredData = data filter (x => streets.keySet.contains(x.street))
 
-    val clusters = new KMeansClusterer(10000*5).clusterize(filteredData)
-    clusters.keys foreach (x => println("y = " + x.getK.toString + "x + " + x.getB.toString()))
+    val clusters = new FuzzyEMAlgorithm(10).clusterize(filteredData)
+    clusters foreach (x => println("y = " + x.getK.toString + "x + " + x.getB.toString()))
 
-    val json = toJson(clusters)
-    println(json)
+//    val json = toJson(clusters)
+//    println(json)
 
-    write(List(".", "src","data", "result.json").mkString(sep), json)
+//    write(List(".", "src","data", "result.json").mkString(sep), json)
   }
 }

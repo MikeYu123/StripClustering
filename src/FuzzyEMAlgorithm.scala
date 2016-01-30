@@ -31,7 +31,10 @@ class FuzzyEMAlgorithm (K: Int){
   }
 
   def isSimilar(matrix1 : Map[(Point, Line), Double], matrix2 : Map[(Point, Line), Double]) : Boolean = {
-    matrix1.keys forall (x => matrix1.get(x) == matrix2.get(x))
+     matrix1.keys forall (x => matrix1.get(x) == matrix2.get(x))
+  }
+  def diff(matrix1 : Map[(Point, Line), Double], matrix2 : Map[(Point, Line), Double]) : Double = {
+    (matrix1 map (x => math.abs(x._2 - matrix2.getOrElse(x._1, 0.0)))) reduce((x, y) => x + y)
   }
 
   def countMembershipMatrix(points: List[Point], lines: List[Line]):Map[(Point, Line), Double] = {
@@ -51,6 +54,7 @@ class FuzzyEMAlgorithm (K: Int){
     do{
       previousMatrix = matrix
       lines = resetLines(lines, points, matrix)
+      matrix = countMembershipMatrix(points, lines)
     } while(!isSimilar(previousMatrix, matrix))
     lines
   }
