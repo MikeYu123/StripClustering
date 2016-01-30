@@ -47,7 +47,7 @@ class FuzzyEMAlgorithm (K: Int){
     pointsMembership reduce ((x, y) => x ++ y)
   }
 
-  def clusterize(points : List[Point]) : List[Line] = {
+  def clusterize(points : List[Point]): Map[(Point, Line), Double] = {
     var lines = initClusters()
     var matrix = countMembershipMatrix(points, lines)
     var previousMatrix = Map[(Point, Line), Double]()
@@ -56,7 +56,8 @@ class FuzzyEMAlgorithm (K: Int){
       lines = resetLines(lines, points, matrix)
       matrix = countMembershipMatrix(points, lines)
     } while(!isSimilar(previousMatrix, matrix))
-    lines
+    //lines
+    matrix
   }
 
 }

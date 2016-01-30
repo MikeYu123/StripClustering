@@ -19,12 +19,23 @@ object DataSet {
 
   } yield Point(lat, lng, address, name)
 
-  def toJson(preparedData: Map[Line, List[Point]]) = {
+  def toJsonKM(preparedData: Map[Line, List[Point]]) = {
     val data = preparedData map (x =>
       ("line" -> ("id" -> x._1.hashCode()) ~ ("k" -> x._1.getK) ~ ("b" -> x._1.getB)) ~
       ("points" -> pointsToJson(x._1.hashCode(), x._2))
     )
     compact(render(data))
+  }
+  def toJsonFEM(preparedData: Map[(Point, Line), Double]) = {
+    val data:Map[Point, List[(Line, Double)]] = null
+    preparedData foreach (x => {
+//      data.apply(x._1._1)
+      data(x._1._1).::(x._1._2, x._2)
+    })
+    val data2:Map[Line, Map[Point, Line]] = (data map (x => (x._1, x._2.maxBy(_._2)._1))).groupBy(_._2)
+    val data3:Map[Line, List[Point]] = data2.map(x=>(x._1, x._2.keys.toList))// map (k,v => k->"loh") //(k:Line, v:Map[Point, Line]) => (v -> v.keys.toList)
+    toJsonKM(data3)
+    //compact(render(data))
   }
 
   def pointsToJson(lineNumber: Int, list: List[Point]) = list map (x =>
@@ -48,18 +59,16 @@ object DataSet {
   def main(args: Array[String]): Unit = {
     val streets = (data groupBy (p => p.street)) map (x => (x._1, x._2.length)) filter (_._2 > 35)
     val filteredData = data filter (x => streets.keySet.contains(x.street))
-    var clusters:Map[Line, List[Point]] = null
-    var counter:Int = 0
-    do{
-//      println((counter+=1).toString)
-      clusters = new KMeansClusterer(100*5).clusterize(filteredData)
-//      clusters.keys foreach (x => println("y = " + x.getK.toString + "x + " + x.getB.toString()))
-    } while (clusters.size != 5)
+    var clusters:Map[(Point, Line), Double] = null
+    //do{
+      clusters = new FuzzyEMAlgorithm(10).clusterize(filteredData)//new KMeansClusterer(100*5).clusterize(filteredData)
 
-    val clusters = new FuzzyEMAlgorithm(10).clusterize(filteredData)
-    clusters foreach (x => println("y = " + x.getK.toString + "x + " + x.getB.toString()))
+    //} while (clusters.size != 5)
 
-    val json = toJson(clusters)
+//    clusters = new FuzzyEMAlgorithm(10).clusterize(filteredData)
+//    clusters foreach (x => println("y = " + x.getK.toString + "x + " + x.getB.toString()))
+
+    val json = toJsonFEM(clusters)
     println(json)
 
     write(List(".", "src","data", "result.json").mkString(sep), json)
