@@ -36,7 +36,7 @@ class KMeansClusterer (K: Int){
 
   def isSimilar(list1 : List[Line], list2 : List[Line]) = {
 //  TODO: is exact match efficient?
-    list1.forall(line1 => list2.count(line2 => line1.isEqual(line2)) > 0)
+    list1.forall(line1 => list2 exists (line2 => line1.isEqual(line2)))
   }
 
   def clusterize(points : List[Point]) : Map[Line, List[Point]] = {
