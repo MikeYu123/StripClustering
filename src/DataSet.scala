@@ -46,7 +46,10 @@ object DataSet {
   }
 
   def main(args: Array[String]): Unit = {
-    val clusters = new KMeansClusterer(100000).clusterize(data)
+    val streets = (data groupBy (p => p.street)) map (x => (x._1, x._2.length)) filter (_._2 > 15)
+    val filteredData = data filter (x => streets.keySet.contains(x.street))
+
+    val clusters = new KMeansClusterer(1000000).clusterize(filteredData)
     clusters.keys foreach (x => println("y = " + x.getK.toString + "x + " + x.getB.toString()))
 
     val json = toJson(clusters)
