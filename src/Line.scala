@@ -5,7 +5,10 @@ class Line (k: Double, b: Double) {
   def getK: Double = k
   def getB: Double = b
 
-  def isEqual(line2 : Line): Boolean = (k == line2.getK) && (b == line2.getB)
+  def isEqual(line2 : Line): Boolean = {
+//    println(k, line2.getK, b, line2.getB, (k == line2.getK) && (b == line2.getB))
+    math.abs(k - line2.getK) < 1E-8 && math.abs(b - line2.getB) < 1E-8
+  }
 
   def norm:Double = math.sqrt(1 + k*k)
 

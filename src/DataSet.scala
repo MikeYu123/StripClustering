@@ -64,7 +64,7 @@ object DataSet {
     val filteredData = data filter (x => streets.keySet.contains(x.street))
     var clusters:Map[(Point, Line), Double] = null
     //do{
-      clusters = new FuzzyEMAlgorithm(10).clusterize(filteredData)//new KMeansClusterer(100*5).clusterize(filteredData)
+      clusters = new FuzzyEMAlgorithm(20).clusterize(filteredData)//new KMeansClusterer(100*5).clusterize(filteredData)
 
     //} while (clusters.size != 5)
 

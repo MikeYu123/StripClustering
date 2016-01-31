@@ -4,11 +4,23 @@
 
 class FuzzyEMAlgorithm (K: Int){
 //  M is the fuzziness exponent
-  val M = 1.5
+  val M = 1.3
   def randDouble(max: Double, min: Double) = math.random * (max - min) + min
 
-  def initClusters(): List[Line] = {
-    (1 to K).toList map (x => new Line(randDouble(3, -3), randDouble(30, -30)))
+  def initClusters(points: List[Point]): List[Line] = {
+//    (1 to K).toList map (x => new Line(randDouble(3, -3), randDouble(30, -30)))
+    points.grouped(20).toList map (x => new Line(resetLine(x).getK*randDouble(0.9, 1.1),resetLine(x).getB*randDouble(0.9, 1.1)))
+  }
+
+  def resetLine(points: List[Point]) : Line = {
+    val n = points.length
+    val sumxy : Double = (points map (x => x.x * x.y)) reduceLeft ((x, y) => x+y)
+    val sumx : Double = (points map (x => x.x)) reduceLeft ((x,y) => x + y)
+    val sumy : Double = (points map (x => x.y)) reduceLeft ((x,y) => x + y)
+    val sumxsq : Double = (points map (x => x.x * x.x)) reduceLeft ((x,y) => x + y)
+    val k = ((n * sumxy) - (sumx * sumy)) / ((n * sumxsq) - (sumx * sumx))
+    val b = (sumy - (k * sumx)) / n
+    new Line(k, b)
   }
 
   def resetLines(lines: List[Line], points: List[Point], memberships: Map[(Point, Line), Double]) : List[Line] = {
@@ -36,6 +48,7 @@ class FuzzyEMAlgorithm (K: Int){
   def plSimilar(x:(Point, Line), m1: Map[(Point, Line), Double], m2:Map[(Point, Line), Double]):Boolean = {
     var res = false
     val m2_elems = m2.filter(y => y._1._1 == x._1 && y._1._2.isEqual(x._2))
+//    println(x, m2_elems)
     if (m2_elems.nonEmpty){
       val (_, m2_value) = m2_elems.head
       val abs = math.abs(m1(x) - m2_value)
@@ -60,17 +73,19 @@ class FuzzyEMAlgorithm (K: Int){
   }
 
   def clusterize(points : List[Point]): Map[(Point, Line), Double] = {
-    var lines = initClusters()
+    var lines = initClusters(points)
     var matrix = countMembershipMatrix(points, lines)
     var previousMatrix = Map[(Point, Line), Double]()
     var counter = 0
     do{
-//      println(counter)
+      println("================" + counter)
       counter += 1
       previousMatrix = matrix
       lines = resetLines(lines, points, matrix)
       matrix = countMembershipMatrix(points, lines)
+      println(isSimilar(matrix, previousMatrix))
     } while(!isSimilar(matrix, previousMatrix))
+//    } while(counter < 10)
     println(matrix)
     matrix
   }
