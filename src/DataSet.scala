@@ -3,6 +3,8 @@ import org.json4s._
 import org.json4s.jackson.JsonMethods._
 import org.json4s.JsonDSL.WithDouble._
 
+import scala.collection.mutable.ListBuffer
+
 
 object DataSet {
   private val sep = File.separator
@@ -27,11 +29,12 @@ object DataSet {
     compact(render(data))
   }
   def toJsonFEM(preparedData: Map[(Point, Line), Double]) = {
-    val data:Map[Point, List[(Line, Double)]] = null
+    var data:Map[Point, ListBuffer[(Line, Double)]] = Map[Point, ListBuffer[(Line, Double)]]()
     preparedData foreach (x => {
-//      data.apply(x._1._1)
-      data(x._1._1).::(x._1._2, x._2)
+      if (!data.contains(x._1._1)) data = data + (x._1._1 -> ListBuffer((x._1._2, x._2)))
+      else  data(x._1._1) += ((x._1._2, x._2)) // :: data(x._1._1)
     })
+    println(data)
     val data2:Map[Line, Map[Point, Line]] = (data map (x => (x._1, x._2.maxBy(_._2)._1))).groupBy(_._2)
     val data3:Map[Line, List[Point]] = data2.map(x=>(x._1, x._2.keys.toList))// map (k,v => k->"loh") //(k:Line, v:Map[Point, Line]) => (v -> v.keys.toList)
     toJsonKM(data3)

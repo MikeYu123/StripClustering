@@ -31,7 +31,19 @@ class FuzzyEMAlgorithm (K: Int){
   }
 
   def isSimilar(matrix1 : Map[(Point, Line), Double], matrix2 : Map[(Point, Line), Double]) : Boolean = {
-     matrix1.keys forall (x => matrix1.get(x) == matrix2.get(x))
+     matrix1.keys forall (x => plSimilar(x, matrix1, matrix2))
+  }
+  def plSimilar(x:(Point, Line), m1: Map[(Point, Line), Double], m2:Map[(Point, Line), Double]):Boolean = {
+    var res = false
+    val m2_elems = m2.filter(y => y._1._1 == x._1 && y._1._2.isEqual(x._2))
+    if (m2_elems.nonEmpty){
+      val (_, m2_value) = m2_elems.head
+      val abs = math.abs(m1(x) - m2_value)
+//      println(abs)
+      res =  abs < 0.5
+    }
+
+    res
   }
   def diff(matrix1 : Map[(Point, Line), Double], matrix2 : Map[(Point, Line), Double]) : Double = {
     (matrix1 map (x => math.abs(x._2 - matrix2.getOrElse(x._1, 0.0)))) reduce((x, y) => x + y)
@@ -51,12 +63,15 @@ class FuzzyEMAlgorithm (K: Int){
     var lines = initClusters()
     var matrix = countMembershipMatrix(points, lines)
     var previousMatrix = Map[(Point, Line), Double]()
+    var counter = 0
     do{
+//      println(counter)
+      counter += 1
       previousMatrix = matrix
       lines = resetLines(lines, points, matrix)
       matrix = countMembershipMatrix(points, lines)
-    } while(!isSimilar(previousMatrix, matrix))
-    //lines
+    } while(!isSimilar(matrix, previousMatrix))
+    println(matrix)
     matrix
   }
 
